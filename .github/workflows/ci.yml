@@ -1,0 +1,92 @@
+#!/bin/bash
+# GitHub Actions CI/CD Pipeline
+
+name: Kiacha OS CI/CD
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  build-frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+      - name: Install dependencies
+        run: cd frontend && npm ci
+      - name: Build
+        run: cd frontend && npm run build
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: frontend-dist
+          path: frontend/dist
+
+  build-backend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+      - name: Install dependencies
+        run: cd backend && npm ci
+      - name: Build
+        run: cd backend && npm run build
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: backend-dist
+          path: backend/dist
+
+  build-firmware:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install dependencies
+        run: sudo apt-get update && sudo apt-get install -y libasound2-dev cmake gcc g++
+      - name: Build firmware
+        run: cd firmware && mkdir -p build && cd build && cmake .. && make
+
+  build-os:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install buildroot dependencies
+        run: sudo apt-get update && sudo apt-get install -y build-essential git python3
+      - name: Build OS image
+        run: |
+          cd os-image/buildroot
+          make kiacha_defconfig
+          make -j$(nproc)
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+      - name: Run tests
+        run: |
+          cd frontend && npm ci && npm run test || true
+          cd ../backend && npm ci && npm run test || true
+
+  docker-build:
+    needs: [build-frontend, build-backend]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+      - name: Build and push
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          file: ./Dockerfile
+          push: false

@@ -1,0 +1,3 @@
+# Ignore all CSS files for stylelint warnings
+# These are Tailwind directives that are valid in PostCSS
+src/**/*.css

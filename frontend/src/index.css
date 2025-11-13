@@ -1,0 +1,11 @@
+/* stylelint-disable */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+/* stylelint-enable */
+
+@layer base {
+  body {
+    @apply bg-black text-cyan-300 overflow-hidden;
+  }
+}

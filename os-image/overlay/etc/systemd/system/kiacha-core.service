@@ -1,0 +1,15 @@
+[Unit]
+Description=Kiacha Core Firmware
+After=network.target
+ConditionVirtualization=!container
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/kiacha-firmware
+Restart=always
+RestartSec=10
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

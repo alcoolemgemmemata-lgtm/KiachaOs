@@ -1,0 +1,15 @@
+[Unit]
+Description=Kiacha Web Dashboard
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/kiacha/dashboard
+ExecStart=/usr/bin/node dist/index.js
+Restart=always
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

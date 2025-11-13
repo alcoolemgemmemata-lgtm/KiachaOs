@@ -1,0 +1,8 @@
+{
+  "wake_word": "kiacha",
+  "model_dir": "/opt/kiacha/models",
+  "backend_ws": "ws://localhost:3001/ws",
+  "ota_server": "http://localhost:3001/ota",
+  "debug": false,
+  "log_level": "info"
+}

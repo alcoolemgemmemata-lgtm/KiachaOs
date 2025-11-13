@@ -1,0 +1,10 @@
+{
+  "name": "kiacha-os",
+  "version": "1.0.0",
+  "description": "Full Physical + Web AI Operating System",
+  "private": true,
+  "workspaces": [
+    "frontend",
+    "backend"
+  ]
+}

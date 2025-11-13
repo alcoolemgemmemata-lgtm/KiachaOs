@@ -1,0 +1,15 @@
+[Unit]
+Description=Kiacha Vision Runtime
+After=kiacha-core.service network.target
+Requires=kiacha-core.service
+
+[Service]
+Type=simple
+ExecStart=/opt/kiacha/bin/kiacha-vision --camera /dev/video0
+Restart=always
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

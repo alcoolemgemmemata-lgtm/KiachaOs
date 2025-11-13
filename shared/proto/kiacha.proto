@@ -1,0 +1,43 @@
+syntax = "proto3";
+
+package kiacha;
+
+service KiachaAPI {
+  rpc Transcribe(AudioRequest) returns (TranscriptionResponse);
+  rpc Synthesize(SynthesisRequest) returns (AudioResponse);
+  rpc Chat(ChatRequest) returns (ChatResponse);
+}
+
+message AudioRequest {
+  bytes audio_data = 1;
+  string format = 2;
+  int32 sample_rate = 3;
+}
+
+message TranscriptionResponse {
+  string text = 1;
+  float confidence = 2;
+  string language = 3;
+}
+
+message SynthesisRequest {
+  string text = 1;
+  string voice = 2;
+  float speed = 3;
+}
+
+message AudioResponse {
+  bytes audio_data = 1;
+  string format = 2;
+  int32 sample_rate = 3;
+}
+
+message ChatRequest {
+  string prompt = 1;
+  string context = 2;
+}
+
+message ChatResponse {
+  string response = 1;
+  float confidence = 2;
+}

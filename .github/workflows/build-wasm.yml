@@ -113,4 +113,29 @@ jobs:
         run: |
           node frontend/wasm/test/validate_wasm_node.js
 
+  validate-wasm-browser:
+    name: Validate WASM in headless browser (Puppeteer)
+    runs-on: ubuntu-latest
+    needs: validate-wasm
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Puppeteer and http-server
+        run: |
+          npm install puppeteer http-server --no-save
+
+      - name: Start static server and run Puppeteer test
+        run: |
+          # Start http-server serving frontend/public on port 8080 in background
+          npx http-server frontend/public -p 8080 -c-1 &
+          # Wait a moment for server to start
+          sleep 2
+          node frontend/wasm/test/validate_wasm_browser.js
+
 

@@ -25,16 +25,9 @@
    - resume_module() - Resume execution
    - list_modules() - Enumerate running modules
 
-✅ Inter-Process Communication (IPC)
    - send_ipc() - Send messages between modules
    - Tokio channel-based async messaging
-   - Non-blocking request-response pattern
-
-✅ Permission System (Capability-Based)
-   - check_permission() - Verify capabilities
-   - grant_permission() - Assign new capabilities
    - revoke_permission() - Remove capabilities
-   - Enforce access control via ACL
 
 ✅ Resource Monitoring
    - get_resources() - CPU, memory, active processes
@@ -48,15 +41,9 @@
    - Memory/CPU limits per sandbox
 
 ✅ Security & Audit
-   - get_audit_logs() - Full action history
    - Timestamp + actor tracking
    - Permission change logging
-   - Module lifecycle events
-
-✅ Event Bus (Broadcast Channel)
-   - subscribe_to_events() - Real-time event stream
    - Tokio broadcast channels
-   - Module lifecycle events
    - Permission changes
    - IPC activity logging
 ```
@@ -64,12 +51,10 @@
 **Files Created:**
 - `kiacha-kernel/Cargo.toml` - Dependencies (tonic, tokio, wasmtime, sysinfo, etc.)
 - `kiacha-kernel/build.rs` - Proto compilation
-- `kiacha-kernel/src/main.rs` - gRPC server startup
 - `kiacha-kernel/src/kernel.rs` - Core KiachaKernel implementation (280+ lines)
 - `kiacha-kernel/src/ipc.rs` - IPC message types and channels
 - `kiacha-kernel/src/permissions.rs` - Permission ACL manager
 - `kiacha-kernel/src/resources.rs` - System resource monitoring
-- `kiacha-kernel/src/wasm_runtime.rs` - Wasmtime sandbox
 - `kiacha-kernel/src/security.rs` - Audit logging
 - `kiacha-kernel/src/event_bus.rs` - Event broadcast (170+ lines)
 - `kiacha-kernel/src/grpc_server.rs` - tonic RPC service (250+ lines)

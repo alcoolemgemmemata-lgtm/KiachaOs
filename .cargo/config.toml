@@ -1,0 +1,41 @@
+# Cargo configuration for Kiacha OS
+# Optimized for single portable Windows executable
+
+[build]
+# Use all CPU cores for compilation
+jobs = 0
+
+[profile.release]
+# Optimize for size (most aggressive)
+opt-level = "z"
+# Link Time Optimization - significantly reduces binary size
+lto = true
+# Single compilation unit for better LTO
+codegen-units = 1
+# Strip symbols from binary (saves ~60% of size)
+strip = true
+# Panic immediately (saves code size)
+panic = "abort"
+# Disable overflow checks in release mode
+overflow-checks = false
+# Incremental compilation off for release
+incremental = false
+
+# Additional optimizations for dependencies
+[profile.release.package."*"]
+opt-level = "z"
+strip = true
+
+# Windows-specific settings
+[target.x86_64-pc-windows-msvc]
+rustflags = [
+    "-C", "target-feature=+crt-static",  # Static CRT linking
+    "-C", "relocation-model=static",     # Static relocation
+    "-C", "link-arg=/SUBSYSTEM:WINDOWS", # Windows subsystem (no console)
+]
+
+# Link as static library where possible
+[target.x86_64-pc-windows-gnu]
+rustflags = [
+    "-C", "link-arg=-static",
+]

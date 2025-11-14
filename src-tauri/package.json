@@ -1,0 +1,21 @@
+{
+  "name": "kiacha-os",
+  "version": "0.1.0",
+  "description": "Kiacha OS - Portable Windows Executable with Embedded Assets",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "build": "tauri build --release",
+    "build:debug": "tauri build",
+    "dev": "tauri dev",
+    "build:frontend": "cd frontend && npm run build && cd ..",
+    "embed:assets": "python embed_assets.py",
+    "build:all": "npm run build:frontend && npm run embed:assets && npm run build",
+    "build:optimized": "npm run build:frontend && npm run embed:assets && npm run build -- --release"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "^1.5.0",
+    "@tauri-apps/api": "^1.5.0",
+    "tauri": "^1.5.0"
+  }
+}

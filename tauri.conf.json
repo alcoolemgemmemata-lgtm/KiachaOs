@@ -1,0 +1,98 @@
+{
+  "build": {
+    "beforeBuildCommand": "",
+    "beforeDevCommand": "cd ../frontend && npm run dev",
+    "devUrl": "http://localhost:5173",
+    "frontendDist": "../dist",
+    "withGlobalTauri": false
+  },
+  "app": {
+    "windows": [
+      {
+        "fullscreen": false,
+        "height": 900,
+        "resizable": true,
+        "title": "Kiacha OS",
+        "width": 1400,
+        "label": "main",
+        "url": "embedded://index.html"
+      }
+    ],
+    "security": {
+      "csp": null
+    }
+  },
+  "package": {
+    "productName": "Kiacha OS",
+    "version": "0.1.0"
+  },
+  "tauri": {
+    "allowlist": {
+      "all": true,
+      "shell": {
+        "all": true,
+        "open": true
+      },
+      "window": {
+        "all": true
+      },
+      "http": {
+        "all": true,
+        "request": true,
+        "scope": [
+          "http://localhost/*",
+          "https://localhost/*",
+          "http://127.0.0.1/*",
+          "https://127.0.0.1/*"
+        ]
+      }
+    },
+    "bundle": {
+      "active": true,
+      "targets": ["windows"],
+      "externalBin": [],
+      "resources": [],
+      "relayoutOnWindowResize": false,
+      "windows": [
+        {
+          "certificateThumbprint": null,
+          "digestAlgorithm": "sha256",
+          "exceptionDomain": [],
+          "iconPath": "icons/icon.png",
+          "installerPaths": {
+            "nsis": null,
+            "wix": null
+          },
+          "nsis": null,
+          "signToolPath": null,
+          "signingIdentity": null,
+          "timestampUrl": "",
+          "tsp": false,
+          "webviewFixedRuntimePath": "",
+          "wix": null
+        }
+      ],
+      "macOS": [],
+      "linux": [],
+      "deb": [],
+      "rpm": [],
+      "appimage": [],
+      "dmg": [],
+      "updater": {
+        "active": false
+      }
+    },
+    "systemTray": null,
+    "updater": {
+      "active": false
+    },
+    "windows": [
+      {
+        "label": "main",
+        "title": "Kiacha OS",
+        "url": "embedded://index.html",
+        "userAgent": "Kiacha OS/0.1.0"
+      }
+    ]
+  }
+}

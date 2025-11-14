@@ -1,0 +1,70 @@
+[package]
+name = "kiacha-os"
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.70"
+
+[lib]
+name = "kiacha_os"
+path = "src/lib.rs"
+
+[[bin]]
+name = "kiacha-os"
+path = "src/main.rs"
+
+[build-dependencies]
+tauri-build = "1.5"
+
+[dependencies]
+# Tauri Framework
+tauri = { version = "1.5", features = ["shell-open", "system-tray", "window-all", "protocol-all"] }
+tauri-plugin-window-state = "0.1"
+
+# Core dependencies
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+tokio = { version = "1.38", features = ["full"] }
+
+# Asset serving
+tiny_http = "0.12"
+
+# Windows specific
+winapi = { version = "0.3", features = ["winuser", "winbase"] }
+windows = { version = "0.52", features = ["Win32_Foundation"] }
+
+# Utilities
+anyhow = "1.0"
+log = "0.4"
+env_logger = "0.11"
+
+[dev-dependencies]
+criterion = "0.5"
+
+[profile.dev]
+opt-level = 0
+
+[profile.release]
+opt-level = "z"           # Optimize for size (most aggressive)
+lto = true               # Link Time Optimization
+codegen-units = 1       # Single compilation unit for better optimization
+strip = true            # Strip symbols from binary
+panic = "abort"         # Abort on panic (smaller binary)
+overflow-checks = false # Disable overflow checks in release
+incremental = false     # No incremental compilation for release
+
+[profile.release.package."*"]
+opt-level = 3
+strip = true
+
+# Cargo tauri specific settings
+[tool.tauri]
+build = { frontendDist = "../dist", devUrl = "http://localhost:5173" }
+
+bundle = { active = true, targets = ["windows"] }
+
+windows = { windowIcon = "icons/icon.png" }
+
+# Optimization for binary size
+[lib]
+opt-level = "z"
+lto = true

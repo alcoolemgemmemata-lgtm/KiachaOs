@@ -1,0 +1,45 @@
+name: Build Hello Kiacha WASM
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch: {}
+
+jobs:
+  build-wasm:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y python3 cmake build-essential git wget unzip
+
+      - name: Install Emscripten SDK (emsdk)
+        run: |
+          # Clone emsdk if missing
+          if [ ! -d "$HOME/emsdk" ]; then
+            git clone https://github.com/emscripten-core/emsdk.git $HOME/emsdk
+          fi
+          cd $HOME/emsdk
+          ./emsdk install latest
+          ./emsdk activate latest
+          # Source environment for this step
+          source $HOME/emsdk/emsdk_env.sh
+          emcc --version
+
+      - name: Build Hello Kiacha WASM
+        env:
+          PROJECT_ROOT: ${{ github.workspace }}
+        run: |
+          # Ensure emsdk env is present for this shell
+          source $HOME/emsdk/emsdk_env.sh || true
+          bash scripts/build-wasm.sh
+
+      - name: Upload WASM artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: hello_kiacha-wasm
+          path: frontend/public/wasm

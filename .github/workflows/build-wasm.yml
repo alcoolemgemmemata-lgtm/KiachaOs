@@ -126,9 +126,18 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Install Puppeteer and http-server
+      - name: Cache npm (frontend)
+        uses: actions/cache@v4
+        with:
+          path: frontend/node_modules
+          key: npm-modules-${{ runner.os }}-${{ hashFiles('frontend/package-lock.json') }}
+          restore-keys: |
+            npm-modules-${{ runner.os }}-
+
+      - name: Install frontend dependencies (includes puppeteer & http-server)
         run: |
-          npm install puppeteer http-server --no-save
+          cd frontend
+          npm ci
 
       - name: Start static server and run Puppeteer test
         run: |

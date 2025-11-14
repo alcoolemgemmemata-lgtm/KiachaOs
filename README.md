@@ -59,6 +59,12 @@ Then open:
 - **API:** http://localhost:3001
 - **ChromaDB:** http://localhost:8000
 
+## 🧾 Languages & Runtimes
+
+See `LANGUAGES.md` for the complete list of languages, runtimes and where each is used in Kiacha OS. Key languages include JavaScript/TypeScript for the UI and apps, C++/WASM for in-browser ML (whisper.cpp, llama.cpp), Python for model tooling, Node.js for backend services, SQL/Redis for storage, shell scripts for boot and OTA, and Device Tree / Makefiles for hardware and builds.
+
+Link: `./LANGUAGES.md`
+
 ## 🔐 Authentication
 
 **Default Credentials:**

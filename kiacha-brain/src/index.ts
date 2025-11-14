@@ -3,6 +3,10 @@ import { KiachaCoreBrain } from './core-brain.js';
 import { WebSocketServer, WebSocket } from 'ws';
 import express, { Request, Response } from 'express';
 import appsRouter, { setKernelClient } from './routes/apps.js';
+import reasoningRouter, { initializeReasoning } from './routes/reasoning.js';
+import toolsRouter, { initializeTools } from './routes/tools.js';
+import eventsRouter, { initializeEventBus } from './routes/events.js';
+import memoryRouter from './routes/memory.js';
 
 const logger = pino({ level: 'info' });
 
@@ -12,7 +16,13 @@ const WS_PORT = 3002;
 const KERNEL_ADDRESS = process.env.KERNEL_ADDRESS || 'localhost:50051';
 
 app.use(express.json());
+
+// Mount routers
 app.use('/api', appsRouter);
+app.use('/api/reasoning', reasoningRouter);
+app.use('/api/tools', toolsRouter);
+app.use('/api/events', eventsRouter);
+app.use('/api/memory', memoryRouter);
 
 // Initialize brain with kernel connection
 const brain = new KiachaCoreBrain(KERNEL_ADDRESS);
@@ -80,8 +90,17 @@ app.get('/api/kernel/resources', async (req: Request, res: Response) => {
     await brain.connect();
     logger.info('✓ Brain connected to kernel');
 
-    // Set kernel client for apps routes
+    // Set kernel client for all routes
     setKernelClient(brain.kernelClient);
+    await initializeReasoning(brain.kernelClient);
+    await initializeTools(brain.kernelClient);
+    await initializeEventBus(null, brain.kernelClient);
+    
+    logger.info('✓ Cognitive modules initialized');
+    logger.info('  - Reasoning Engine (WASM)')
+    logger.info('  - Tool Use Engine (30+ tools)')
+    logger.info('  - Cognitive Event Bus')
+    logger.info('  - Semantic Memory');
 
     // WebSocket server for real-time communication
     const wss = new WebSocketServer({ port: WS_PORT });

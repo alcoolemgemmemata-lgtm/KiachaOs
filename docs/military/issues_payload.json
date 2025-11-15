@@ -1,0 +1,32 @@
+[
+  {
+    "title": "[M0] Provision Key Vault skeleton and policies",
+    "body": "M0.E4.T1: Terraform playbook for Vault dev; M0.E4.T2: Policy for key rotation (doc).",
+    "labels": ["military","priority/p0","area/security"]
+  },
+  {
+    "title": "[M1] Define TCB and architecture decision document",
+    "body": "M1.E1.T1: Create architecture trade-off document and choose Hybrid/Microkernel approach.",
+    "labels": ["military","priority/p0","area/kernel"]
+  },
+  {
+    "title": "[M1] Implement memory safety primitives and CFI in kernel builds",
+    "body": "M1.E2.T1..T3: ASLR, guard pages, stack canaries, CFI, LTO.",
+    "labels": ["military","priority/p0","area/kernel"]
+  },
+  {
+    "title": "[M2] Integrate TPM2 and implement attestation server PoC",
+    "body": "M2.E2.T1..T2: Integrate tpm2-tools and implement attestation flow (TPM quote -> attestation server).",
+    "labels": ["military","priority/p0","area/security"]
+  },
+  {
+    "title": "[M3] Implement signed log pipeline and LogSigner agent",
+    "body": "M3.E1.T1..T2: Define canonical log envelope and implement local signing agent to push bundles to SIEM.",
+    "labels": ["military","priority/p0","area/observability"]
+  },
+  {
+    "title": "[M3] D-IDS PoC: data schema and training pipeline",
+    "body": "M3.E2.T1..T3: Define features, build off-device training pipeline, and deploy quantized model for on-device inference.",
+    "labels": ["military","priority/p1","area/ai"]
+  }
+]

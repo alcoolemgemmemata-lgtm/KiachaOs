@@ -1,0 +1,22 @@
+name: Sign and Release
+
+on:
+  workflow_dispatch:
+  release:
+    types: [published]
+
+jobs:
+  sign:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: os-image-artifacts
+      - name: Sign artifacts (stub)
+        run: |
+          echo "Signing artifacts..." && ls -la artifacts || true
+      - name: Create release notes
+        run: |
+          echo "Release prepared"

@@ -1,0 +1,43 @@
+name: CI Build
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+      - name: Install Rust
+        uses: dtolnay/setup-rust@v1
+      - name: Run linters
+        run: |
+          cd frontend && npm ci && npm run lint
+          cd .. && cargo fmt -- --check
+          cargo clippy -- -D warnings
+
+  build:
+    needs: lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build frontend
+        run: |
+          cd frontend
+          npm ci
+          npm run build
+      - name: Build wasm validate
+        run: |
+          cd frontend/wasm
+          npm ci
+          npm run build-wasm
+      - name: Build rust kernel
+        run: |
+          cd kiacha-kernel
+          cargo build --release

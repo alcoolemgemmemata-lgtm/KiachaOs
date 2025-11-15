@@ -1,0 +1,4 @@
+#!/bin/sh
+# Placeholder for kiacha-secure (security module)
+# Replace with compiled secure binary.
+echo "Placeholder kiacha-secure"

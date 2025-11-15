@@ -1,0 +1,4 @@
+#!/bin/sh
+# Placeholder for kiacha-vision (vision module)
+# Replace with compiled vision binary.
+echo "Placeholder kiacha-vision"

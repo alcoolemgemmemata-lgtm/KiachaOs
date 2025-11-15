@@ -1,0 +1,4 @@
+#!/bin/sh
+# Placeholder for kiacha-network (network module)
+# Replace with compiled network binary.
+echo "Placeholder kiacha-network"

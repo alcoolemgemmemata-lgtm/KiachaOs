@@ -1,0 +1,4 @@
+#!/bin/sh
+# Placeholder for kiacha-voice (speech module)
+# Replace with compiled speech binary.
+echo "Placeholder kiacha-voice"

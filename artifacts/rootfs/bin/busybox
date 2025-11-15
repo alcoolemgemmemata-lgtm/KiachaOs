@@ -1,0 +1,4 @@
+#!/bin/sh
+# Placeholder for /bin/busybox
+# Replace with a real busybox static binary if desired.
+echo "Placeholder busybox"

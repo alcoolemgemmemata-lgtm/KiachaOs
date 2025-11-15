@@ -1,0 +1,2 @@
+# Placeholder for boot.bin (MBR boot stage, typically 512 bytes)
+# Replace with real MBR/boot stage binary as needed.

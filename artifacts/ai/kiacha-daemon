@@ -1,0 +1,4 @@
+#!/bin/sh
+# Placeholder for kiacha-daemon (AI supervisor daemon)
+# Replace with compiled daemon binary.
+echo "Placeholder kiacha-daemon"

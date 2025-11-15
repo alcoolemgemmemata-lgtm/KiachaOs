@@ -1,0 +1,2 @@
+# Placeholder for efiboot.img (EFI system partition image)
+# Populate this image with EFI files (os-image/efi) when building.

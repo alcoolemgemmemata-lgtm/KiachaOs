@@ -1,0 +1,2 @@
+# Placeholder for initramfs.img
+# Replace with a cpio.gz or initramfs image produced by your build system.

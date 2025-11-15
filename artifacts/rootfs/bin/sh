@@ -1,0 +1,4 @@
+#!/bin/sh
+# Placeholder for /bin/sh
+# Replace with a real shell binary (dash, bash, etc.)
+echo "Placeholder /bin/sh"

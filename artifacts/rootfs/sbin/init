@@ -1,0 +1,4 @@
+#!/bin/sh
+# Placeholder for /sbin/init (PID 1)
+# This is not a real init process. Replace with a proper init binary or script.
+echo "Placeholder init: not a real init process."

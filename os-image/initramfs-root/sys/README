@@ -1,0 +1,2 @@
+# /sys placeholder
+This directory is mounted by the kernel at runtime. Keep empty in the initramfs.

@@ -1,0 +1,4 @@
+#!/bin/sh
+# Minimal shell placeholder that execs system shell if present
+echo "KiachaOS placeholder /bin/sh"
+exec /bin/busybox sh || /bin/sh || true

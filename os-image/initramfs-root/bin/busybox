@@ -1,0 +1,4 @@
+#!/bin/sh
+# Minimal busybox stub: dispatches to /bin/sh
+echo "KiachaOS busybox stub - delegating to /bin/sh"
+exec /bin/sh

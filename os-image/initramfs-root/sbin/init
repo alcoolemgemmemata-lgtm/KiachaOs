@@ -1,0 +1,12 @@
+#!/bin/sh
+# Minimal init placeholder for initramfs
+mount -t proc proc /proc || true
+mount -t sysfs sys /sys || true
+echo "KiachaOS minimal initramfs starting..."
+# Try to run /bin/sh
+if [ -x /bin/sh ]; then
+  exec /bin/sh
+else
+  echo "No shell found; dropping to busybox"
+  exec /bin/busybox sh
+fi

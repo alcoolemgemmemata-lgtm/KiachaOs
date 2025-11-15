@@ -1,38 +1,154 @@
-KiachaOS os-image build
+KiachaOS os-image Build System
 
-This folder contains helpers to create minimal boot artifacts for KiachaOS.
+This directory contains the build automation for KiachaOS boot and system images.
 
-Files and targets:
+## Directory Structure
 
-- `initramfs-root/` - root tree used to build `initramfs.img`.
-  - `sbin/init` - minimal init script (placeholder)
-  - `bin/sh` - placeholder shell
+- `initramfs-root/` - root filesystem tree for the initial ramdisk
+  - `sbin/init` - init script
+  - `bin/sh` - shell
   - `bin/busybox` - busybox stub
-  - `dev/console`, `dev/null`, `proc/`, `sys/` - placeholders
-- `initramfs.img` - generated initramfs (cpio newc + gzip)
-- `efiboot/` - EFI files (BOOTX64.EFI, grubx64.efi, limine.efi)
-- `efiboot.img` - FAT image with EFI partition (created by `build-efiboot.sh`)
-- `kiachaos.img` - sparse disk image (64MB) created by `build-kiacha-img.sh`
+  - `dev/` - device placeholders
+  - `proc/` - procfs mountpoint
+  - `sys/` - sysfs mountpoint
 
-Build commands (from `os-image/`):
+- `efiboot/` - EFI boot files (UEFI loaders)
+  - `BOOTX64.EFI` - main EFI loader
+  - `grubx64.efi` - GRUB EFI binary (optional)
+  - `limine.efi` - Limine EFI loader (optional)
+
+## Generated Artifacts
+
+- `initramfs.img` - compressed initial ramdisk (cpio newc + gzip)
+- `efiboot.img` - FAT-formatted EFI system partition image (20 MB)
+- `kiachaos.img` - sparse disk image placeholder (64 MB)
+- `kiachaos.iso` - bootable ISO image (hybrid UEFI/BIOS)
+
+## Build Scripts
+
+- `build-initramfs.sh` - packs initramfs-root/ into initramfs.img
+  - Uses system `cpio` if available
+  - Falls back to bundled `create_cpio_newc.py`
+  - Final fallback to tar.gz
+
+- `build-efiboot.sh` - creates FAT-formatted efiboot.img
+  - Requires: mkfs.vfat, mount
+  - Formats the image and copies EFI files
+
+- `build-kiacha-img.sh` - creates 64 MB sparse disk image
+  - Uses truncate/fallocate for sparse file creation
+  - Provides instructions for partitioning
+
+- `build-iso.sh` - builds EFI-bootable ISO
+  - Uses xorriso (preferred) or grub-mkrescue
+  - Creates ISO with EFI/BOOT directory structure
+
+- `create_cpio_newc.py` - Python CPIO newc packer (standalone)
+  - Used as fallback when system cpio unavailable
+  - Handles file modes, ownership, and timestamps
+
+## Makefile Targets
 
 ```sh
-make initramfs    # builds initramfs.img
-make efiboot      # builds efiboot.img (requires mkfs.vfat and loop mount)
-make kiacha       # creates kiachaos.img (64MB sparse)
-make iso          # attempts to build kiachaos.iso (requires xorriso or grub-mkrescue)
+make initramfs    # Build initramfs.img
+make efiboot      # Build efiboot.img
+make kiacha       # Build kiachaos.img
+make iso          # Build kiachaos.iso
+make all          # Build all artifacts
+make clean        # Remove generated images
 ```
 
-Notes:
-- `build-initramfs.sh` prefers system `cpio` if present, otherwise uses the bundled `create_cpio_newc.py` to produce a `initramfs.img` (gzip'd cpio newc).
-- `build-efiboot.sh` formats `efiboot.img` as FAT when `mkfs.vfat` is available and mounts it to copy EFI files.
-- These scripts are written to be portable but assume a POSIX environment (Linux/WSL/macOS). On Windows native PowerShell, use WSL or adapt commands.
+## Usage
 
-To test in QEMU (example):
+### Local Build (requires Linux/WSL)
 
 ```sh
-# using kernel and generated initramfs
-qemu-system-x86_64 -m 1024 -kernel ../artifacts/kernel/kernel.elf -initrd initramfs.img -nographic
+cd os-image
+make all
+# or individual targets:
+make initramfs
+make efiboot
+make kiacha
+make iso
 ```
 
-To build a bootable disk image with EFI partition, follow the comments in `build-kiacha-img.sh` to partition, create filesystems, and copy EFI and rootfs content.
+### GitHub Actions Build (automatic)
+
+The `.github/workflows/build.yml` workflow:
+- Installs all dependencies: cpio, dosfstools, xorriso, etc.
+- Runs all build scripts
+- Uploads artifacts to Actions tab
+- Publishes to GitHub Releases on tagged commits
+
+### Testing in QEMU
+
+```sh
+# Boot with initramfs (no disk):
+qemu-system-x86_64 -m 1024 \
+  -kernel ../artifacts/kernel/kernel.elf \
+  -initrd initramfs.img \
+  -nographic
+
+# Boot from disk image:
+qemu-system-x86_64 -m 1024 \
+  -drive file=kiachaos.img,format=raw \
+  -nographic
+
+# Boot from ISO:
+qemu-system-x86_64 -m 1024 \
+  -cdrom kiachaos.iso \
+  -nographic
+```
+
+## Customization
+
+To modify initramfs contents:
+1. Edit files in `initramfs-root/`
+2. Run `make initramfs` to rebuild
+
+To add EFI binaries:
+1. Place `.efi` files in `efiboot/`
+2. Run `make efiboot` to rebuild
+
+To adjust image sizes:
+- Edit SIZE variables in build scripts
+- Rebuild with `make clean && make all`
+
+## Dependencies
+
+- `cpio` - file archiver
+- `gzip` - compression
+- `mkfs.vfat` - FAT filesystem formatter (dosfstools)
+- `xorriso` - ISO 9660 generator (for ISO builds)
+- `python3` - fallback CPIO packer (create_cpio_newc.py)
+
+On Debian/Ubuntu:
+```sh
+sudo apt-get install cpio dosfstools xorriso gzip
+```
+
+On Alpine/minimal:
+```sh
+apk add cpio dosfstools xorriso
+```
+
+## Troubleshooting
+
+**Issue**: `cpio: command not found`
+- **Solution**: Install cpio or use bundled Python packer
+
+**Issue**: `mkfs.vfat not found`
+- **Solution**: Install dosfstools; efiboot.img will be created but not formatted
+
+**Issue**: `Cannot mount loop device` (efiboot build)
+- **Solution**: This is expected in some CI environments; the image is created but not populated
+
+**Issue**: `xorriso not found`
+- **Solution**: Install xorriso; placeholder ISO will be created
+
+## Notes
+
+- All scripts are POSIX-compatible and tested on Ubuntu 20.04+
+- Windows users should use WSL2 with Ubuntu 20.04 or later
+- macOS users may need to install GNU tools via Homebrew
+- The bundled Python packer works as a universal fallback when `cpio` is unavailable

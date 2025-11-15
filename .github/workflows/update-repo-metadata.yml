@@ -1,0 +1,22 @@
+name: Update Repository Metadata
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  update-metadata:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Update repository description and homepage
+        env:
+          REPO: alcoolemgemmemata-lgtm/KiachaOs
+          DESC: "KiachaOS — Experimental bootable OS with integrated AI modules, hardened kernel (ASLR, stack canaries), and automated CI builds. Build artifacts: initramfs, efiboot, disk image, ISO."
+          HOMEPAGE: "https://github.com/alcoolemgemmemata-lgtm/KiachaOs"
+        run: |
+          echo "Updating repository metadata for $REPO"
+          API_URL="https://api.github.com/repos/$REPO"
+          PAYLOAD=$(jq -n --arg d "$DESC" --arg h "$HOMEPAGE" '{description:$d, homepage:$h}')
+          echo "Payload: $PAYLOAD"
+          curl -s -X PATCH -H "Authorization: Bearer $GITHUB_TOKEN" -H "Accept: application/vnd.github+json" "$API_URL" -d "$PAYLOAD" | jq -r '.message // .description'

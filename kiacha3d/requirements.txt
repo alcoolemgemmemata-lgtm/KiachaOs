@@ -1,0 +1,50 @@
+# KiachaOS 3D Engine - Python Dependencies
+# Install with: pip install -r requirements.txt
+
+# Web Framework
+Flask==2.3.2
+Flask-CORS==4.0.0
+python-dotenv==1.0.0
+
+# Voice Recognition
+openai-whisper==20230314
+SpeechRecognition==3.10.0
+pyaudio==0.2.13
+
+# Vosk Lightweight Offline Recognition
+vosk==0.3.45
+pocketsphinx==5.0.1
+
+# Gesture Recognition
+opencv-python==4.8.0.74
+mediapipe==0.8.11
+
+# Audio/Microphone Input
+pyaudio==0.2.13
+librosa==0.10.0
+numpy==1.24.3
+
+# Data Processing
+pandas==2.0.3
+scipy==1.11.2
+
+# API Communication
+requests==2.31.0
+httpx==0.24.1
+
+# Logging & Monitoring
+structlog==23.1.0
+python-json-logger==2.0.7
+
+# Development (Optional)
+pytest==7.4.0
+pytest-cov==4.1.0
+black==23.7.0
+flake8==6.0.0
+mypy==1.4.1
+
+# LLM Integration (Optional, for AI autonomy)
+openai==0.27.8
+huggingface-hub==0.16.4
+torch==2.0.1
+transformers==4.30.2

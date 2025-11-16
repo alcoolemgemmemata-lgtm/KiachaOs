@@ -1,0 +1,176 @@
+{
+  "version": "1.0.0",
+  "commands": {
+    "camera": {
+      "rotate": {
+        "description": "Rotate camera around object",
+        "parameters": {
+          "axis": {"type": "string", "enum": ["x", "y", "z"]},
+          "degrees": {"type": "number"},
+          "duration": {"type": "number", "default": 1.0}
+        }
+      },
+      "zoom": {
+        "description": "Zoom camera in or out",
+        "parameters": {
+          "factor": {"type": "number", "description": "1.1 = zoom in 10%, 0.9 = zoom out 10%"},
+          "duration": {"type": "number", "default": 0.5}
+        }
+      },
+      "pan": {
+        "description": "Move camera position",
+        "parameters": {
+          "direction": {"type": "string", "enum": ["up", "down", "left", "right", "forward", "back"]},
+          "distance": {"type": "number"}
+        }
+      },
+      "orbit": {
+        "description": "Orbit camera around target",
+        "parameters": {
+          "radius": {"type": "number"},
+          "height": {"type": "number"},
+          "angle": {"type": "number"}
+        }
+      }
+    },
+    "lighting": {
+      "set_intensity": {
+        "description": "Set ambient light intensity",
+        "parameters": {
+          "intensity": {"type": "number", "min": 0.0, "max": 2.0}
+        }
+      },
+      "set_color": {
+        "description": "Set ambient light color",
+        "parameters": {
+          "color": {"type": "array", "items": {"type": "number", "min": 0, "max": 1}}
+        }
+      },
+      "toggle": {
+        "description": "Toggle lighting on/off",
+        "parameters": {
+          "enabled": {"type": "boolean"}
+        }
+      }
+    },
+    "model": {
+      "load": {
+        "description": "Load a 3D model file",
+        "parameters": {
+          "filepath": {"type": "string"},
+          "name": {"type": "string", "optional": true}
+        }
+      },
+      "rotate": {
+        "description": "Rotate model",
+        "parameters": {
+          "object_id": {"type": "integer"},
+          "axis": {"type": "string", "enum": ["x", "y", "z"]},
+          "degrees": {"type": "number"}
+        }
+      },
+      "scale": {
+        "description": "Scale model",
+        "parameters": {
+          "object_id": {"type": "integer"},
+          "scale": {"type": "number"}
+        }
+      },
+      "position": {
+        "description": "Set model position",
+        "parameters": {
+          "object_id": {"type": "integer"},
+          "x": {"type": "number"},
+          "y": {"type": "number"},
+          "z": {"type": "number"}
+        }
+      }
+    },
+    "render": {
+      "wireframe": {
+        "description": "Toggle wireframe rendering",
+        "parameters": {
+          "enabled": {"type": "boolean"}
+        }
+      },
+      "shadow_quality": {
+        "description": "Set shadow quality (0-3)",
+        "parameters": {
+          "quality": {"type": "integer", "min": 0, "max": 3}
+        }
+      },
+      "post_processing": {
+        "description": "Enable/disable post-processing effects",
+        "parameters": {
+          "enabled": {"type": "boolean"}
+        }
+      }
+    },
+    "animation": {
+      "play": {
+        "description": "Play animation",
+        "parameters": {
+          "object_id": {"type": "integer"},
+          "animation_name": {"type": "string"},
+          "duration": {"type": "number"}
+        }
+      },
+      "stop": {
+        "description": "Stop animation",
+        "parameters": {
+          "object_id": {"type": "integer"}
+        }
+      }
+    },
+    "ai": {
+      "autonomy_level": {
+        "description": "Set AI autonomy level",
+        "parameters": {
+          "level": {"type": "number", "min": 0.0, "max": 1.0}
+        }
+      },
+      "suggest": {
+        "description": "Get AI suggestions for scene improvement",
+        "parameters": {}
+      },
+      "auto_adjust": {
+        "description": "Let AI automatically adjust scene",
+        "parameters": {
+          "mode": {"type": "string", "enum": ["lighting", "camera", "composition", "all"]}
+        }
+      }
+    }
+  },
+  "voice_patterns": {
+    "camera_rotation": [
+      "rotate(.*?)degrees?",
+      "turn(.*?)around",
+      "spin(.*?)way"
+    ],
+    "zoom": [
+      "zoom (in|out)",
+      "(get|move)(.*)closer",
+      "(get|move)(.*)far(ther)?"
+    ],
+    "model_load": [
+      "load (model|file) (.+)",
+      "open (.+)",
+      "import (.+)"
+    ],
+    "lighting": [
+      "light (on|off)",
+      "set light",
+      "illuminate"
+    ]
+  },
+  "gesture_actions": {
+    "pinch_in": "zoom_in",
+    "pinch_out": "zoom_out",
+    "swipe_left": "rotate_right",
+    "swipe_right": "rotate_left",
+    "swipe_up": "pan_up",
+    "swipe_down": "pan_down",
+    "long_press": "context_menu",
+    "double_tap": "reset_view"
+  }
+}
